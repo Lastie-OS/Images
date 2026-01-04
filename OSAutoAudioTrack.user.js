@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name OS Auto Audio Track [LATEST]
-// @version 2025-12-16
+// @version 2026-1-3
 // @description Allows for limitless audio customization within the OS sequencer by allowing the use of Audio Tracks to be automatically set upon site load.
 // @author Lastie
 // @match https://*.onlinesequencer.net/*
