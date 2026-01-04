@@ -35,10 +35,9 @@
         }
     }
 
-    // Function to find the link and execute the logic
     function initializeTrack() {
         const descriptionBox = document.querySelector('#info-sidebar-description-text');
-        if (!descriptionBox) return false; // Return "no" if container isn't there yet
+        if (!descriptionBox) return false; 
 
         const allDescLinks = descriptionBox.querySelectorAll("a");
         if (allDescLinks.length === 0) return false;
@@ -49,10 +48,9 @@
         showAudioTrackSelect();
         fetchAndDecodeAudio(trackLink);
         
-        return true; // Success!
+        return true;
     }
 
-    // Observe the document to wait for the specific element to exist
     const observer = new MutationObserver((mutations, obs) => {
         const element = document.querySelector('#info-sidebar-description-text');
         
