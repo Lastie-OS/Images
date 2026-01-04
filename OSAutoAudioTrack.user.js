@@ -23,7 +23,6 @@
             const arrayBuffer = await response.arrayBuffer();
             console.log("ArrayBuffer received:", arrayBuffer);
 
-            // Ensure audioSystem is defined before calling
             if (typeof audioSystem !== 'undefined') {
                 audioSystem.loadAudioTrack(arrayBuffer);
                 $("#wavesurfer_element").toggle();
