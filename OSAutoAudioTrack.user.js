@@ -1,6 +1,5 @@
 // ==UserScript==
 // @name OS Auto Audio Track [LATEST]
-// @namespace http://tampermonkey.net/
 // @version 2025-12-16
 // @description This is a userscript that allows for limitless audio customization within the OS sequencer by allowing the use of Audio Tracks to be automatically set upon site load. DISCLAIMER: IN ORDER FOR THIS TO WORK THE PEOPLE LISTENING WILL NEED T
 // @author Lastie
