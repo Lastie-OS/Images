@@ -1,45 +1,72 @@
 // ==UserScript==
 // @name OS Auto Audio Track [LATEST]
 // @version 2025-12-16
-// @description This is a userscript that allows for limitless audio customization within the OS sequencer by allowing the use of Audio Tracks to be automatically set upon site load. DISCLAIMER: IN ORDER FOR THIS TO WORK THE PEOPLE LISTENING WILL NEED T
+// @description Allows for limitless audio customization within the OS sequencer by allowing the use of Audio Tracks to be automatically set upon site load.
 // @author Lastie
 // @match https://*.onlinesequencer.net/*
-// @icon https://www.google.com/s2/favicons?sz=64...uencer.net
+// @icon https://www.google.com/s2/favicons?sz=64&domain=onlinesequencer.net
 // @grant none
 // ==/UserScript==
 
 (function () {
+    'use strict';
 
-async function fetchAndDecodeAudio(audioUrl, onLoad) {
-try {
-const response = await fetch(audioUrl);
+    async function fetchAndDecodeAudio(audioUrl) {
+        try {
+            console.log("Trying to fetch URL:", audioUrl);
+            const response = await fetch(audioUrl);
 
-if (!response.ok) {
-throw new Error(`HTTP error! Status: ${response.status}`);
-}
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
 
-const arrayBuffer = await response.arrayBuffer();
+            const arrayBuffer = await response.arrayBuffer();
+            console.log("ArrayBuffer received:", arrayBuffer);
 
-console.log(arrayBuffer);
-audioSystem.loadAudioTrack(
-arrayBuffer);
-$("#wavesurfer_element").toggle();
-} catch (error) {
-console.error("Error fetching or decoding audio:", error);
-}
-}
+            // Ensure audioSystem is defined before calling
+            if (typeof audioSystem !== 'undefined') {
+                audioSystem.loadAudioTrack(arrayBuffer);
+                $("#wavesurfer_element").toggle();
+            } else {
+                console.error("audioSystem not found.");
+            }
+        } catch (error) {
+            console.error("Error fetching or decoding audio:", error);
+        }
+    }
 
-let trackLink;
-document.addEventListener("DOMContentLoaded", () => {
-const allDescLinks = document.querySelector('#info-sidebar-description-text').querySelectorAll("a");
+    // Function to find the link and execute the logic
+    function initializeTrack() {
+        const descriptionBox = document.querySelector('#info-sidebar-description-text');
+        if (!descriptionBox) return false; // Return "no" if container isn't there yet
 
-const trackLink = allDescLinks[allDescLinks.length - 1].href;
+        const allDescLinks = descriptionBox.querySelectorAll("a");
+        if (allDescLinks.length === 0) return false;
 
-console.log(trackLink);
+        const trackLink = allDescLinks[allDescLinks.length - 1].href;
+        console.log("Found track link:", trackLink);
 
-showAudioTrackSelect();
-console.log("trackSelectWork");
+        showAudioTrackSelect();
+        fetchAndDecodeAudio(trackLink);
+        
+        return true; // Success!
+    }
 
-fetchAndDecodeAudio(trackLink);
-});
+    // Observe the document to wait for the specific element to exist
+    const observer = new MutationObserver((mutations, obs) => {
+        const element = document.querySelector('#info-sidebar-description-text');
+        
+        if (element) {
+            const success = initializeTrack();
+            if (success === true) {
+                obs.disconnect();
+            }
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
 })();
